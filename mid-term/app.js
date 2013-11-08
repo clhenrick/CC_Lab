@@ -14,7 +14,7 @@ var connect = require('connect'),
 	SerialPort = require("serialport").SerialPort,
 	
 	// type ls /dev/tty.* in terminal - to find the serial ports that are available on your computer 
-	sPort = "/dev/tty.usbmodem1421",
+	sPort = "/dev/tty.usbmodem1411",
 	// create an instance (object)
 	arduino = new SerialPort(sPort, {
 		baudrate: 9600 // The arduino Serial speed

@@ -11,4 +11,7 @@ html, body {
 
 #myCanvas {
 	z-index: -1;
+	transition-property: background;
+	transition-duration: 2s;
+	transition-delay: 1s;
 }
