@@ -6,8 +6,7 @@
 var connect = require('connect'),
 	fs = require('fs'),
 	util = require('util'),
-	io = require('socket.io').listen(9001), // WS port
-	port = 9000, // HTTP port
+	port = process.env.PORT || 5000, // HTTP port
 	
 	// new stuff
 	// define a class
@@ -15,7 +14,7 @@ var connect = require('connect'),
 	SerialPort = require("serialport").SerialPort,
 	
 	// type ls /dev/tty.* in terminal - to find the serial ports that are available on your computer 
-	sPort = "/dev/tty.usbmodem1411",
+	sPort = "/dev/tty.usbmodem1421",
 	// create an instance (object)
 	arduino = new SerialPort(sPort, {
 		baudrate: 9600 // The arduino Serial speed
@@ -23,11 +22,12 @@ var connect = require('connect'),
 
 //old stuff again:
 // create web server using connect 
-connect.createServer(
+var app = connect.createServer(
 	connect.static(__dirname + '/public') // two underscores
 ).listen(port);
 util.log('the server is running on port: ' + port);
 
+var io = require('socket.io').listen(app); //change app to 5002 to make sure socket.io is running
 
 // init socket.io
 io.set('log level', 1); // 1 - reduces the socket's logging in the Terminal 
@@ -78,24 +78,24 @@ arduino.on('data', function(data) { // data comes in Buffer <   >
 		// save the data between 'B' and 'E'
 		sendData = getData.substring(getData.indexOf('B') + 1, getData.indexOf('E'));
 		getData = '';
-		util.log("the received data is="+getData);
-		util.log(sendData);
+		//util.log("the received data is="+getData);
+		//util.log(sendData);
 		// parse data to browser
-		io.sockets.emit('pot', sendData); //emit is to send
+		io.sockets.emit('myCanvas', sendData); //emit is to send
 		// socket.io
 		// emit, on, broadcast.emit, io.sockets.emit
 		} 
 	
 	//now with analog button
-	util.log("The data coming out is="+data);
+	//util.log("The data coming out is="+data);
 	getDataButton+=data;
 		if (getDataButton.indexOf('J') >= 0 && getDataButton.indexOf('K') >= 0) {
 				sendDataButton=getDataButton.substring(getDataButton.indexOf('J') + 1, getDataButton.indexOf('K'));
 				getDataButton = '';
 				//util.log(sendDataButton);
-				util.log("dataButton="+sendDataButton);
+				//util.log("dataButton="+sendDataButton);
 				// parse data to browser
-				io.sockets.emit('ardButton', sendDataButton); //emit is to send
+				io.sockets.emit('myCanvas', sendDataButton); //emit is to send
 
 		}//end of if button
 

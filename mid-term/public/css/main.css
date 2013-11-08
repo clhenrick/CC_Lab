@@ -1,0 +1,14 @@
+html, body {
+	width: 100%;
+	height: 100%;
+	margin: 0px;
+}
+
+#clearVP{
+	z-index: 100;
+	top: -100%;
+}
+
+#myCanvas {
+	z-index: -1;
+}
